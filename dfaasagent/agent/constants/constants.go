@@ -15,6 +15,7 @@ const (
 	RLAgentStrategy          = "rlagentstrategy"
 	RandomStrategy           = "randomstrategy"
 	LatencyThresholdStrategy = "latencythresholdstrategy"
+	CostBasedStrategy = "costbasedstrategy"
 
 	// HAProxyMaxWeight is the maximum possible weight value that should be used
 	// in the HAProxy configuration file

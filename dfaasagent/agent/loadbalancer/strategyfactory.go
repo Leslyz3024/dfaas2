@@ -409,3 +409,34 @@ func (strategyFactory *latencyThresholdStrategyFactory) createStrategy() (Strate
 
 	return strategy, nil
 }
+
+// createStrategy creates and returns a new CostBasedStrategy instance.
+type costBasedStrategyFactory struct{}
+
+func (strategyFactory *costBasedStrategyFactory) createStrategy() (Strategy, error) {
+	strategy := &CostBasedStrategy{}
+
+	faas, err := faas.New(_config.FaaSPlatform,
+		_config.FaaSHost,
+		_config.FaaSPort,
+		_config.OpenWhiskNamespace,
+		_config.OpenWhiskAPIKey,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("initializing FaaS platform wrapper: %w", err)
+	}
+	strategy.faas = faas
+
+	hacfgupdater, err := hacfgupd.New(_config.DataPlaneAPIHost,
+		_config.DataPlaneAPIPort,
+		_config.DataPlaneAPIUser,
+		_config.DataPlaneAPIPassword,
+		haproxycfgLatencyThresholdTemplate,
+		templateFuncs(strategy.faas))
+	if err != nil {
+		return nil, fmt.Errorf("initializing HAProxy config updater: %w", err)
+	}
+	strategy.hacfgupdater = hacfgupdater
+
+	return strategy, nil
+}

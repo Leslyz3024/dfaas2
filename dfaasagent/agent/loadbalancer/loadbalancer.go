@@ -66,6 +66,8 @@ func Initialize(p2pHost host.Host, config config.Configuration) {
 		_strategyFactory = &randomStrategyFactory{}
 	case constants.LatencyThresholdStrategy:
 		_strategyFactory = &latencyThresholdStrategyFactory{}
+	case constants.CostBasedStrategy:
+		_strategyFactory = &costBasedStrategyFactory{}
 	}
 }
 
